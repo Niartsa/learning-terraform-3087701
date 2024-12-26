@@ -60,21 +60,26 @@ module "blog_alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
-      target_id        = aws_instance.blog.id
+      
+      targets = {
+        my target = {
+          target_id = aws_instance.blog.id
+          port      = 80
+        }
+      }
     }
   }
 
-  listeners = {
-    ex-http-redirect = {
+  http_tcp_listeners = [
+    {
       port               = 80
       protocol           = "HTTP"
       target_group_index = 0
     }
-  }
+  ]
 
   tags = {
     Environment = "dev"
-    Project     = "Example"
   }
 }
 
